@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    private let startPoint = CGPoint(x: 0, y: 50)
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            Color.mint.ignoresSafeArea()
+            VolumnView(startPoint)
         }
-        .padding()
     }
 }
 
