@@ -10,16 +10,18 @@ import SwiftUI
 
 struct VolumnView: View {
     
-    init(_ startPoint: CGPoint) {
+    init(_ startPoint: CGPoint, value: Binding<Int>) {
         self.startPoint = startPoint
         self.currentLevelPoint = startPoint
         self.currentContainerPoint = startPoint
+        self._value = value
     }
     
     private let stepRangeLength: CGFloat = 40
     private let startPoint: CGPoint
     @State var currentLevelPoint: CGPoint
     @State var currentContainerPoint: CGPoint
+    @Binding var value: Int
     
     @State private var isDrag: Bool = false
     @State private var containerHeight: CGFloat = 0
@@ -31,7 +33,7 @@ struct VolumnView: View {
             .foregroundColor(.black)
             .animation(.smooth(extraBounce: 0.1), value: containerHeight)
             .background(alignment: .topLeading, content: {
-                RangeLevelView(isDrag: $isDrag, startPoint: $currentLevelPoint)
+                RangeLevelView(isDrag: $isDrag, startPoint: $currentLevelPoint, value: $value)
                     .offset(x: startPoint.x, y: startPoint.y + stepRangeLength)
                     .readSize(onChange: { levelViewHeight = $0.height - stepRangeLength })
             })

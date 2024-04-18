@@ -9,12 +9,15 @@ import SwiftUI
 
 struct ContentView: View {
     
-    private let startPoint = CGPoint(x: 0, y: 50)
+    private let startPoint = CGPoint(x: 0, y: 200)
+    @State var rangeLevel: Int = 1
     
     var body: some View {
         ZStack {
             Color.mint.ignoresSafeArea()
-            VolumnView(startPoint)
+            Circle().frame(width: 20 * CGFloat(rangeLevel)).foregroundColor(.indigo)
+                .animation(.bouncy, value: rangeLevel)
+            VolumnView(startPoint, value: $rangeLevel)
         }
     }
 }

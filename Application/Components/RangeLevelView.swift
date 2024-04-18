@@ -12,7 +12,10 @@ struct RangeLevelView: View {
     
     @Binding var isDrag: Bool
     @Binding var startPoint: CGPoint
+    @Binding var value: Int
+    @State var pointerPoint = CGPoint(x: 0, y: 12) // y = (stepRangeLength - pointerWidth) / 2
     
+    private let stepRangeLength: CGFloat = 40
     private let pointerWidth: CGFloat = 16
     
     var body: some View {
@@ -25,12 +28,9 @@ struct RangeLevelView: View {
     var rangeView: some View {
         VStack(spacing: 0) {
             Group {
-                Circle().stroke(lineWidth: 1).frame(height: 40)
-                Circle().stroke(lineWidth: 1).frame(height: 40)
-                Circle().stroke(lineWidth: 1).frame(height: 40)
-                Circle().stroke(lineWidth: 1).frame(height: 40)
-                Circle().stroke(lineWidth: 1).frame(height: 40)
-                Circle().stroke(lineWidth: 1).frame(height: 40)
+                ForEach(0..<6, id: \.self) { _ in
+                    Circle().stroke(lineWidth: 1).frame(height: 40)
+                }
             }
             .foregroundColor(.clear)
             .background(content: {
@@ -45,7 +45,7 @@ struct RangeLevelView: View {
     var pointerView: some View {
         Circle()
             .frame(width: pointerWidth)
-            .offset(y: startPoint.y - pointerWidth / 2)
+            .offset(y: pointerPoint.y)
             .gesture(
                 DragGesture()
                     .onChanged({ value in
@@ -65,9 +65,11 @@ struct RangeLevelView: View {
         let max: CGFloat = 220
         
         guard newDragYoffset > min, newDragYoffset < max else { return }
-        let moreStep = Int((newDragYoffset - startPoint.y) / (eachStep / 2))
+        let moreStep = Int((newDragYoffset - pointerPoint.y) / (eachStep / 2))
         
+        value = value + moreStep
         startPoint = .init(x: startPoint.x, y: startPoint.y + CGFloat(moreStep) * eachStep)
+        pointerPoint.y = pointerPoint.y + CGFloat(moreStep) * eachStep
     }
 }
 
