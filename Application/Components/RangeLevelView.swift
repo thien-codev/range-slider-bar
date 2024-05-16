@@ -13,8 +13,9 @@ struct RangeLevelView: View {
     @Binding var isDrag: Bool
     @Binding var startPoint: CGPoint
     @Binding var value: Int
-    @State var pointerPoint = CGPoint(x: 0, y: 12) // y = (stepRangeLength - pointerWidth) / 2
+    @State var pointerPoint: CGPoint = .zero
     
+    private let totalStep = 8
     private let stepRangeLength: CGFloat = 40
     private let pointerWidth: CGFloat = 16
     
@@ -23,13 +24,16 @@ struct RangeLevelView: View {
             rangeView
             pointerView
         }
+        .onAppear {
+            pointerPoint = CGPoint(x: 0, y: (stepRangeLength - pointerWidth) / 2)
+        }
     }
     
     var rangeView: some View {
         VStack(spacing: 0) {
             Group {
-                ForEach(0..<6, id: \.self) { _ in
-                    Circle().stroke(lineWidth: 1).frame(height: 40)
+                ForEach(0..<totalStep, id: \.self) { _ in
+                    Circle().stroke(lineWidth: 1).frame(height: stepRangeLength)
                 }
             }
             .foregroundColor(.clear)
@@ -60,16 +64,15 @@ struct RangeLevelView: View {
     }
     
     func updatePoint(with newDragYoffset: CGFloat) {
-        let eachStep: CGFloat = 40
-        let min: CGFloat = 20
-        let max: CGFloat = 220
+        let min: CGFloat = stepRangeLength / 2
+        let max: CGFloat = stepRangeLength * CGFloat(totalStep) - min
         
         guard newDragYoffset > min, newDragYoffset < max else { return }
-        let moreStep = Int((newDragYoffset - pointerPoint.y) / (eachStep / 2))
+        let moreStep = Int((newDragYoffset - pointerPoint.y) / (stepRangeLength / 2))
         
         value = value + moreStep
-        startPoint = .init(x: startPoint.x, y: startPoint.y + CGFloat(moreStep) * eachStep)
-        pointerPoint.y = pointerPoint.y + CGFloat(moreStep) * eachStep
+        startPoint = .init(x: startPoint.x, y: startPoint.y + CGFloat(moreStep) * stepRangeLength)
+        pointerPoint.y = pointerPoint.y + CGFloat(moreStep) * stepRangeLength
     }
 }
 
