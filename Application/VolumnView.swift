@@ -13,7 +13,7 @@ struct VolumnView: View {
     init(_ startPoint: CGPoint, value: Binding<Int>) {
         self.startPoint = startPoint
         self.currentLevelPoint = startPoint
-        self.currentContainerPoint = startPoint
+        self.currentContainerPoint = .init(x: startPoint.x, y: startPoint.y + CGFloat((value.wrappedValue - 1) * Int(stepRangeLength)))
         self._value = value
     }
     

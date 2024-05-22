@@ -25,7 +25,7 @@ struct RangeLevelView: View {
             pointerView
         }
         .onAppear {
-            pointerPoint = CGPoint(x: 0, y: (stepRangeLength - pointerWidth) / 2)
+            pointerPoint = CGPoint(x: 0, y: (stepRangeLength - pointerWidth) / 2 + CGFloat(Int(stepRangeLength) * (value - 1)))
         }
     }
     
@@ -71,7 +71,7 @@ struct RangeLevelView: View {
         let moreStep = Int((newDragYoffset - pointerPoint.y) / (stepRangeLength / 2))
         
         value = value + moreStep
-        startPoint = .init(x: startPoint.x, y: startPoint.y + CGFloat(moreStep) * stepRangeLength)
+        startPoint = .init(x: startPoint.x, y: pointerPoint.y + CGFloat(moreStep) * stepRangeLength - (stepRangeLength - pointerWidth) / 2)
         pointerPoint.y = pointerPoint.y + CGFloat(moreStep) * stepRangeLength
     }
 }

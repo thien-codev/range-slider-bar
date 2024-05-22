@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     
     private let startPoint = CGPoint(x: 0, y: 0)
-    @State var rangeLevel: Int = 1
+    @State var rangeLevel: Int = 2
     
     var body: some View {
         ZStack {
